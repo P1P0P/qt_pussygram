@@ -13,7 +13,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp
 
-RESOURCES += "C:\dev\Qt_Project\qt_messenger\pussyGram2\res"
+RESOURCES += "C:\dev\Qt_Project\qt_pussygram\pussygram\res"
 
 HEADERS += \
     initialization.h \

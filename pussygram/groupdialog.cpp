@@ -31,7 +31,5 @@ void GroupDialog::on_buttonBox_clicked()
     }
 }
 
-QString GroupDialog::get_group_name(){
-    return ui->group_edit->toPlainText();
-}
+
 

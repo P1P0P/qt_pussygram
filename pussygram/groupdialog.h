@@ -15,8 +15,6 @@ class GroupDialog : public QDialog
 public:
     explicit GroupDialog(QWidget *parent = nullptr);
     ~GroupDialog();
-    QString get_group_name();
-
 
 private slots:
 

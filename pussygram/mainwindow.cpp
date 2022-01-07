@@ -74,4 +74,3 @@ void MainWindow::on_create_group_triggered()
     GroupDialog * gd = new GroupDialog;
     gd->show();
 }
-

@@ -18,7 +18,11 @@ public:
     ~MainWindow();
 
 private slots:
-    void on_chats_list_clicked(const QModelIndex &index);
+    void on_chats_list_itemClicked(QListWidgetItem *item);
+
+    void on_members_list_itemClicked(QListWidgetItem *item);
+
+
 
 private:
     Ui::MainWindow *ui;

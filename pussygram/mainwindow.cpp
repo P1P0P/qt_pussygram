@@ -26,22 +26,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
-void MainWindow::on_chats_list_clicked(const QModelIndex &index)
-{
-    ui->name_label->setText(ui->chats_list->currentItem()->text());
-    //мемберы
-    ui->members_list->clear();
-    QStringList list;
-    QSqlQuery query("SELECT member FROM pussy_chats WHERE chat_name = '" + ui->chats_list->currentItem()->text() + "'");
-    while (query.next()) {
-        list << query.value(0).toString();
-    }
-    ui->members_list->addItems(list);
-}
-
 void MainWindow::update_chats_list()
 {
+    ui->chats_list->clear();
     QStringList list;
     QSqlQuery query("SELECT chat_name FROM pussy_chats");
     while (query.next()) {
@@ -49,4 +36,25 @@ void MainWindow::update_chats_list()
     }
     ui->chats_list->addItems(list);
 }
+
+void MainWindow::on_chats_list_itemClicked(QListWidgetItem *item)
+{
+    ui->name_label->setText(item->text());
+    //мемберы
+    ui->members_list->clear();
+    QStringList list;
+    QSqlQuery query("SELECT user_login FROM pussy_chats WHERE chat_name = '" + item->text() + "'");
+    while (query.next()) {
+        list << query.value(0).toString();
+    }
+    ui->members_list->addItems(list);
+}
+
+void MainWindow::on_members_list_itemClicked(QListWidgetItem *item)
+{
+     ui->name_label->setText(item->text());
+     update_chats_list();
+}
+
+
 

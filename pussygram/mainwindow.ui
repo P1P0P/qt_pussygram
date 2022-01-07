@@ -14,7 +14,7 @@
    <string>PussyGram</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+   <iconset>
     <normaloff>:/res/kisspng-emoji-tiger-text-messaging-emoticon-sticker-lion-face-5ac99e07d28a10.8305330915231626318624.png</normaloff>:/res/kisspng-emoji-tiger-text-messaging-emoticon-sticker-lion-face-5ac99e07d28a10.8305330915231626318624.png</iconset>
   </property>
   <property name="styleSheet">
@@ -63,7 +63,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+           <iconset>
             <normaloff>:/res/kisspng-emoji-tiger-text-messaging-emoticon-sticker-lion-face-5ac99e07d28a10.8305330915231626318624.png</normaloff>:/res/kisspng-emoji-tiger-text-messaging-emoticon-sticker-lion-face-5ac99e07d28a10.8305330915231626318624.png</iconset>
           </property>
           <property name="iconSize">
@@ -126,7 +126,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+           <iconset>
             <normaloff>:/res/pngaaa.com-946722 (1).png</normaloff>:/res/pngaaa.com-946722 (1).png</iconset>
           </property>
           <property name="iconSize">
@@ -200,8 +200,6 @@
    </property>
   </action>
  </widget>
- <resources>
-  <include location="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

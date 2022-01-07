@@ -8,11 +8,20 @@ initialization::initialization(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    m_db = QSqlDatabase::addDatabase("QPSQL", "PSQL");
+    m_db.setDatabaseName("fn1131_2021");
+    m_db.setHostName    ("195.19.32.74");
+    m_db.setPort        (5432);
+    m_db.setUserName    ("student");
+    m_db.setPassword    ("bmstu");
+    if (!m_db.open())
+        qDebug() << ("Error: " + m_db.lastError().text());
+
     ui->sign_up_widget->hide();
     setFixedSize(500, 300);
 
     //логины
-    local_db = QSqlDatabase::addDatabase("QSQLITE");
+    local_db = QSqlDatabase::addDatabase("QSQLITE", "local_db");
     local_db.setDatabaseName("db_password");
     local_db.open();
 
@@ -22,7 +31,6 @@ initialization::initialization(QWidget *parent) :
     QStringList list;
     query.exec("SELECT login FROM passwords");
     while (query.next()){
-        qDebug() << query.value(0).toString();
         list << query.value(0).toString();
     }
     ui->login_box->addItems(list);
@@ -58,59 +66,44 @@ void initialization::on_login_box_currentIndexChanged(const QString &arg1)
 }
 
 
-void initialization::on_enter_button_clicked()
+void initialization::on_enter_button_clicked() //вход
 {
     MainWindow *main;
-    m_db = QSqlDatabase::addDatabase("QPSQL");
-    m_db.setDatabaseName("fn1131_2021");
-    m_db.setHostName    ("195.19.32.74");
-    m_db.setPort        (5432);
-    m_db.setUserName    ("student");
-    m_db.setPassword    ("bmstu");
-    if (!m_db.open())
-        qDebug() << ("Error: " + m_db.lastError().text());
 
-    QSqlQuery query1(m_db);
-    std::string temp = "SELECT login,password FROM pussy_users WHERE login ='"
-            + ui->login_box->currentText().toStdString() + "' and password ='"
-            + ui->password_line->text().toStdString() + "';";
-     query1.exec(temp.c_str());
-     if (query1.next()){
-         close();
-         main = new MainWindow();
-         main->show();
-     }
-     else{
-         ui->error_label->setText("Ошибка");
-     }
+    QSqlQuery query(m_db);
+    QString temp = "SELECT login,password FROM pussy_users WHERE login ='"
+            + ui->login_box->currentText() + "' and password ='"
+            + ui->password_line->text() + "';";
+    query.exec(temp);
+    if (query.next()){
+        if (ui->remember_button->isChecked()){
+            QSqlQuery query2(local_db);
+            temp = "INSERT INTO passwords VALUES('" + ui->login_box->currentText() + "','" + ui->password_line->text() + "')";
+            query2.exec(temp);
+        }
+        close();
+        main = new MainWindow();
+        main->show();
+    }
+    else{
+        ui->error_label->setText("Ошибка");
+    }
 }
 
 
 
-void initialization::on_reg2_button_clicked()
+void initialization::on_reg2_button_clicked() //регистрация
 {
-
-    m_db = QSqlDatabase::addDatabase("QPSQL");
-    m_db.setDatabaseName("fn1131_2021");
-    m_db.setHostName    ("195.19.32.74");
-    m_db.setPort        (5432);
-    m_db.setUserName    ("student");
-    m_db.setPassword    ("bmstu");
-    if (!m_db.open())
-        qDebug() << ("Error: " + m_db.lastError().text());
-
     ui->label_4->setText("");
-        QSqlQuery query(m_db);
-        std::string temp = "SELECT login FROM pussy_users WHERE login ='" + ui->login_line->text().toStdString() + "';";
-        query.exec(temp.c_str());
+    QSqlQuery query(m_db);
+    QString temp = "SELECT login FROM pussy_users WHERE login ='" + ui->login_line->text() + "';";
+    query.exec(temp);
         if (!query.next())
         {
-            temp = "INSERT INTO pussy_users VALUES('" + ui->login_line->text().toStdString()
-                    + "','" + ui->password_line_3->text().toStdString()
-                    + "','" + ui->nickname_line->text().toStdString() + "');";
-            qDebug() << temp.c_str();
-            qDebug() << query.exec(temp.c_str());
-            qDebug() << query.lastError();
+            temp = "INSERT INTO pussy_users VALUES('" + ui->login_line->text()
+                    + "','" + ui->password_line_3->text()
+                    + "','" + ui->nickname_line->text() + "');";
+            query.exec(temp);
             ui->label_4->setText("Регистрация прошла успешна");
         }
 }

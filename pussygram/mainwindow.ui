@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>975</width>
+    <height>653</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>PussyGram</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+    <normaloff>:/res/kisspng-emoji-tiger-text-messaging-emoticon-sticker-lion-face-5ac99e07d28a10.8305330915231626318624.png</normaloff>:/res/kisspng-emoji-tiger-text-messaging-emoticon-sticker-lion-face-5ac99e07d28a10.8305330915231626318624.png</iconset>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_5">
+    <item row="0" column="0">
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QWidget" name="gridLayoutWidget">
+       <layout class="QGridLayout" name="left_layout">
+        <item row="0" column="0">
+         <widget class="QListWidget" name="chats_list"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="gridLayoutWidget_2">
+       <layout class="QGridLayout" name="center_layout">
+        <item row="3" column="0">
+         <widget class="QPushButton" name="emoji_button">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true"/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+            <normaloff>:/res/kisspng-emoji-tiger-text-messaging-emoticon-sticker-lion-face-5ac99e07d28a10.8305330915231626318624.png</normaloff>:/res/kisspng-emoji-tiger-text-messaging-emoticon-sticker-lion-face-5ac99e07d28a10.8305330915231626318624.png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" colspan="3">
+         <widget class="QLabel" name="name_label">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QTextEdit" name="input_line">
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="2">
+         <widget class="QPushButton" name="send_button">
+          <property name="maximumSize">
+           <size>
+            <width>50</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="icon">
+           <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+            <normaloff>:/res/pngaaa.com-946722 (1).png</normaloff>:/res/pngaaa.com-946722 (1).png</iconset>
+          </property>
+          <property name="iconSize">
+           <size>
+            <width>45</width>
+            <height>25</height>
+           </size>
+          </property>
+          <property name="flat">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="0" colspan="3">
+         <widget class="QTextEdit" name="chat_"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="gridLayoutWidget_3">
+       <layout class="QGridLayout" name="right_layout">
+        <item row="0" column="0" colspan="2">
+         <widget class="QListWidget" name="members_list"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>975</width>
+     <height>25</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Меню</string>
+    </property>
+    <addaction name="action"/>
+    <addaction name="action_4"/>
+    <addaction name="separator"/>
+    <addaction name="action_3"/>
+    <addaction name="separator"/>
+    <addaction name="reconnection_button"/>
+   </widget>
+   <addaction name="menu"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="action">
+   <property name="text">
+    <string>Добавить друга</string>
+   </property>
+  </action>
+  <action name="reconnection_button">
+   <property name="text">
+    <string>Сменить пользователя</string>
+   </property>
+  </action>
+  <action name="action_3">
+   <property name="text">
+    <string>Создать группу</string>
+   </property>
+  </action>
+  <action name="action_4">
+   <property name="text">
+    <string>Удалить друга</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc"/>
+ </resources>
+ <connections/>
+</ui>

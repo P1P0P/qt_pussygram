@@ -68,7 +68,6 @@ void initialization::on_login_box_currentIndexChanged(const QString &arg1)
 
 void initialization::on_enter_button_clicked() //вход
 {
-    MainWindow *main;
 
     QSqlQuery query(m_db);
     QString temp = "SELECT login,password FROM pussy_users WHERE login ='"
@@ -82,8 +81,9 @@ void initialization::on_enter_button_clicked() //вход
             query2.exec(temp);
         }
         close();
-        main = new MainWindow();
-        main->show();
+        MainWindow *mainWindow;
+        mainWindow = new MainWindow(ui->login_box->currentText());
+        mainWindow->show();
     }
     else{
         ui->error_label->setText("Ошибка");

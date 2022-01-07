@@ -18,6 +18,11 @@ MainWindow::MainWindow(QWidget *parent)
     m_db.setPassword    ("bmstu");
     if (!m_db.open())
         qDebug() << ("Error: " + m_db.lastError().text());
+}
+
+MainWindow::MainWindow(QString login) : MainWindow()
+{
+    current_login = login;
     update_chats_list();
 }
 
@@ -30,7 +35,7 @@ void MainWindow::update_chats_list()
 {
     ui->chats_list->clear();
     QStringList list;
-    QSqlQuery query("SELECT chat_name FROM pussy_chats");
+    QSqlQuery query("SELECT chat_name FROM pussy_chats, pussy_chats_link WHERE pussy_chats.chat_id = pussy_chats_link.chat_id AND user_login = '" + current_login + "'");
     while (query.next()) {
         list << query.value(0).toString();
     }
@@ -43,7 +48,7 @@ void MainWindow::on_chats_list_itemClicked(QListWidgetItem *item)
     //мемберы
     ui->members_list->clear();
     QStringList list;
-    QSqlQuery query("SELECT user_login FROM pussy_chats WHERE chat_name = '" + item->text() + "'");
+    QSqlQuery query("SELECT user_login FROM pussy_chats, pussy_chats_link WHERE pussy_chats.chat_id = pussy_chats_link.chat_id AND chat_name = '" + item->text() + "'");
     while (query.next()) {
         list << query.value(0).toString();
     }
@@ -56,5 +61,17 @@ void MainWindow::on_members_list_itemClicked(QListWidgetItem *item)
      update_chats_list();
 }
 
+void MainWindow::on_reconnection_button_triggered()
+{
+    close();
+    initialization * init = new initialization;
+    init->show();
+}
 
+
+void MainWindow::on_create_group_triggered()
+{
+    GroupDialog * gd = new GroupDialog;
+    gd->show();
+}
 

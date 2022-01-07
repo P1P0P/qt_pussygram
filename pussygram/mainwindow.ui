@@ -172,7 +172,7 @@
     <addaction name="action"/>
     <addaction name="action_4"/>
     <addaction name="separator"/>
-    <addaction name="action_3"/>
+    <addaction name="create_group"/>
     <addaction name="separator"/>
     <addaction name="reconnection_button"/>
    </widget>
@@ -189,7 +189,7 @@
     <string>Сменить пользователя</string>
    </property>
   </action>
-  <action name="action_3">
+  <action name="create_group">
    <property name="text">
     <string>Создать группу</string>
    </property>

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QtSql>
 #include <QListWidget>
+#include <groupdialog.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,6 +16,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    MainWindow(QString);
     ~MainWindow();
 
 private slots:
@@ -22,9 +24,12 @@ private slots:
 
     void on_members_list_itemClicked(QListWidgetItem *item);
 
+    void on_reconnection_button_triggered();
 
+    void on_create_group_triggered();
 
 private:
+    QString current_login;
     Ui::MainWindow *ui;
     QSqlDatabase m_db;
     void update_chats_list();

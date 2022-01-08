@@ -29,16 +29,16 @@ private slots:
 
     void on_create_group_triggered();
 
-    void on_add_friend_triggered();
-
-    void on_delete_friend_triggered();
-
     void on_enter_group_triggered();
+
+    void on_send_button_clicked();
 
 private:
     QString current_login;
     Ui::MainWindow *ui;
     QSqlDatabase m_db;
     void update_chats_list();
+    void show_chat(QListWidgetItem *item);
+    void show_dialog(QListWidgetItem *item);
 };
 #endif // MAINWINDOW_H

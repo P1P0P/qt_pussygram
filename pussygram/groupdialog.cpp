@@ -41,35 +41,37 @@ void GroupDialog::on_buttonBox_clicked()
 {
     QString temp;
     QSqlQuery query(m_db);
+    int chats_id;
     qDebug() << m_choice;
         if(m_choice == "Создать группу"){
-            int chats_id;
-            temp = "SELECT MAX(chat_id) FROM pussy_chats AS max;";
+            query.exec("SELECT MAX(chat_id) FROM (\
+                       (SELECT MAX(chat_id) AS chat_id FROM pussy_chats)\
+                       union\
+                       (SELECT MAX(dialog_id) AS chat_id FROM pussy_dialog)\
+                       ) COMBINED");
+            query.first();
+            chats_id = query.value(0).toInt();
+            temp = "INSERT INTO pussy_chats VALUES(" + QString::number(chats_id+1) + ",'" + m_login + "','true');";
+            qDebug() << temp;
+            if(query.exec(temp)){
+                temp = "INSERT INTO pussy_chats_link VALUES (" + QString::number(chats_id+1)+ ",'" + ui->group_edit->toPlainText() + "');";
+                query.exec(temp);
+                accept();
+            }
+        }
+        else{
+            QString chat_name;
+            temp = "SELECT chat_id FROM pussy_chats_link WHERE chat_name = '" + ui->group_edit->toPlainText() + "';";
             query.exec(temp);
             query.first();
             chats_id = query.value(0).toInt();
-            temp = "INSERT INTO pussy_chats VALUES(" +  QString::number(chats_id+1) + ",'" + m_login + "','true');";
-            qDebug() << temp;
-            if(query.exec(temp)){
-                temp = "INSERT INTO pussy_chats_link VALUES (" +  QString::number(chats_id+1)+ ",'" + ui->group_edit->toPlainText() + "');";
+            if(chats_id != 0){
+                temp = "INSERT INTO pussy_chats VALUES(" +  QString::number(chats_id) + ",'" + m_login + "','false');";
                 query.exec(temp);
                 accept();
             }
-        }
-        else if(m_choice == "Добавить друга"){
-            temp = "INSERT INTO pussy_friends VALUES('" + m_login + "','" + ui->group_edit->toPlainText() + "');";
-            if(query.exec(temp)){
-                qDebug() << query.exec(temp);
-                temp = "INSERT INTO pussy_friends VALUES('" + ui->group_edit->toPlainText() + "','" + m_login + "');";
-                query.exec(temp);
-                accept();
-            }
-            else{
-                ui->error_label->setText("Вы уже друзья");
-            }
-        }
-        else if(m_choice == "Удалить друга"){
-            temp = "DELETE FROM pussy_friends WHERE('" + m_login + "','" + ui->group_edit->toPlainText() + "');";
+            else
+                ui->error_label->setText("Такой группы не существует");
         }
 }
 

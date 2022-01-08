@@ -14,7 +14,7 @@
    <string>PussyGram</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
     <normaloff>:/res/kisspng-emoji-tiger-text-messaging-emoticon-sticker-lion-face-5ac99e07d28a10.8305330915231626318624.png</normaloff>:/res/kisspng-emoji-tiger-text-messaging-emoticon-sticker-lion-face-5ac99e07d28a10.8305330915231626318624.png</iconset>
   </property>
   <property name="styleSheet">
@@ -63,7 +63,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
             <normaloff>:/res/kisspng-emoji-tiger-text-messaging-emoticon-sticker-lion-face-5ac99e07d28a10.8305330915231626318624.png</normaloff>:/res/kisspng-emoji-tiger-text-messaging-emoticon-sticker-lion-face-5ac99e07d28a10.8305330915231626318624.png</iconset>
           </property>
           <property name="iconSize">
@@ -126,7 +126,7 @@
            <string/>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
             <normaloff>:/res/pngaaa.com-946722 (1).png</normaloff>:/res/pngaaa.com-946722 (1).png</iconset>
           </property>
           <property name="iconSize">
@@ -141,7 +141,11 @@
          </widget>
         </item>
         <item row="1" column="0" colspan="3">
-         <widget class="QTextEdit" name="chat_"/>
+         <widget class="QTextEdit" name="chat_">
+          <property name="readOnly">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -169,9 +173,6 @@
     <property name="title">
      <string>Меню</string>
     </property>
-    <addaction name="add_friend"/>
-    <addaction name="delete_friend"/>
-    <addaction name="separator"/>
     <addaction name="enter_group"/>
     <addaction name="create_group"/>
     <addaction name="separator"/>
@@ -206,6 +207,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc"/>
+ </resources>
  <connections/>
 </ui>

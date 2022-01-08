@@ -71,6 +71,27 @@ void MainWindow::on_reconnection_button_triggered()
 
 void MainWindow::on_create_group_triggered()
 {
-    GroupDialog * gd = new GroupDialog;
+    GroupDialog * gd = new GroupDialog(current_login, ui->create_group->text());
     gd->show();
 }
+
+
+void MainWindow::on_add_friend_triggered()
+{
+    GroupDialog * gd = new GroupDialog(current_login, ui->add_friend->text());
+    gd->show();
+}
+
+
+void MainWindow::on_delete_friend_triggered()
+{
+    GroupDialog * gd = new GroupDialog(current_login, ui->delete_friend->text());
+    gd->show();
+}
+
+
+void MainWindow::on_enter_group_triggered()
+{
+
+}
+

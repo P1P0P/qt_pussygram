@@ -169,9 +169,10 @@
     <property name="title">
      <string>Меню</string>
     </property>
-    <addaction name="action"/>
-    <addaction name="action_4"/>
+    <addaction name="add_friend"/>
+    <addaction name="delete_friend"/>
     <addaction name="separator"/>
+    <addaction name="enter_group"/>
     <addaction name="create_group"/>
     <addaction name="separator"/>
     <addaction name="reconnection_button"/>
@@ -179,7 +180,7 @@
    <addaction name="menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
-  <action name="action">
+  <action name="add_friend">
    <property name="text">
     <string>Добавить друга</string>
    </property>
@@ -194,9 +195,14 @@
     <string>Создать группу</string>
    </property>
   </action>
-  <action name="action_4">
+  <action name="delete_friend">
    <property name="text">
     <string>Удалить друга</string>
+   </property>
+  </action>
+  <action name="enter_group">
+   <property name="text">
+    <string>Войти в группу</string>
    </property>
   </action>
  </widget>

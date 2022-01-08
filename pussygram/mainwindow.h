@@ -17,6 +17,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     MainWindow(QString);
+
     ~MainWindow();
 
 private slots:
@@ -27,6 +28,12 @@ private slots:
     void on_reconnection_button_triggered();
 
     void on_create_group_triggered();
+
+    void on_add_friend_triggered();
+
+    void on_delete_friend_triggered();
+
+    void on_enter_group_triggered();
 
 private:
     QString current_login;

@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include <QtSql>
+#include <mainwindow.h>
 
 namespace Ui {
 class GroupDialog;
@@ -13,7 +14,8 @@ class GroupDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit GroupDialog(QWidget *parent = nullptr);
+     GroupDialog(QWidget *parent = nullptr);
+     GroupDialog(QString, QString);
     ~GroupDialog();
 
 private slots:
@@ -23,7 +25,8 @@ private slots:
 private:
     Ui::GroupDialog *ui;
     QSqlDatabase m_db;
-
+    QString m_login;
+    QString m_choice;
 };
 
 #endif // GROUPDIALOG_H

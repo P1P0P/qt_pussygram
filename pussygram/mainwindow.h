@@ -33,6 +33,10 @@ private slots:
 
     void on_send_button_clicked();
 
+    void set_item_size();
+
+    void on_emoji_button_clicked(bool checked);
+
 private:
     QString current_login;
     Ui::MainWindow *ui;
@@ -40,5 +44,7 @@ private:
     void update_chats_list();
     void show_chat(QListWidgetItem *item);
     void show_dialog(QListWidgetItem *item);
+
+    bool is_on_dialog;
 };
 #endif // MAINWINDOW_H

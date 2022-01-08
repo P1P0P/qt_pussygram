@@ -98,11 +98,12 @@ void initialization::on_reg2_button_clicked() //регистрация
     QSqlQuery query(m_db);
     QString temp = "SELECT login FROM pussy_users WHERE login ='" + ui->login_line->text() + "';";
     query.exec(temp);
-        if (!query.next())
-        {
+        if (!query.next()){
             temp = "INSERT INTO pussy_users VALUES('" + ui->login_line->text()
                     + "','" + ui->password_line_3->text()
                     + "','" + ui->nickname_line->text() + "');";
+            query.exec(temp);
+            temp = "INSERT INTO pussy_chats VALUES(1,'" + ui->login_line->text() + "','false');";
             query.exec(temp);
             ui->label_4->setText("Регистрация прошла успешна");
         }

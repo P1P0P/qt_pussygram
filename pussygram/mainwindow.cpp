@@ -8,7 +8,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
     //список чатов
     m_db = QSqlDatabase::addDatabase("QPSQL");
     m_db.setDatabaseName("fn1131_2021");
@@ -18,6 +17,31 @@ MainWindow::MainWindow(QWidget *parent)
     m_db.setPassword    ("bmstu");
     if (!m_db.open())
         qDebug() << ("Error: " + m_db.lastError().text());
+
+    ui->emoji_list->hide();
+    ui->emoji_list->addItem("\U0001F638");
+    ui->emoji_list->addItem("\U0001F639");
+    ui->emoji_list->addItem("\U0001F63A");
+    ui->emoji_list->addItem("\U0001F63B");
+    ui->emoji_list->addItem("\U0001F63C");
+    ui->emoji_list->addItem("\U0001F63D");
+    ui->emoji_list->addItem("\U0001F63E");
+    ui->emoji_list->addItem("\U0001F63F");
+    ui->emoji_list->addItem("\U0001F431");
+    ui->emoji_list->addItem("\U0001F436");
+    ui->emoji_list->addItem("\U0001F640");
+    ui->emoji_list->addItem("\U0001F351");
+    ui->emoji_list->addItem("\U0001F381");
+    ui->emoji_list->addItem("\U0001F4A3");
+    ui->emoji_list->addItem("\U0001F339");
+    ui->emoji_list->addItem("\U0001F36A");
+    ui->emoji_list->addItem("\U0001F4A9");
+    int count = ui->emoji_list->count();
+    for(int i = 0; i < count; i++)
+    {
+      QListWidgetItem *item = ui->emoji_list->item(i);
+      item->setSizeHint(QSize(50, 50));
+    }
 }
 
 MainWindow::MainWindow(QString login) : MainWindow()
@@ -40,6 +64,7 @@ void MainWindow::update_chats_list()
         list << query.value(0).toString();
     }
     ui->chats_list->addItems(list);
+    set_item_size();
 }
 
 void MainWindow::on_chats_list_itemClicked(QListWidgetItem *item)
@@ -54,12 +79,15 @@ void MainWindow::on_chats_list_itemClicked(QListWidgetItem *item)
     }
     ui->members_list->addItems(list);
     show_chat(item);
+    is_on_dialog = 0;
+    set_item_size();
 }
 
 void MainWindow::on_members_list_itemClicked(QListWidgetItem *item)
 {
      ui->name_label->setText(item->text());
      update_chats_list();
+     is_on_dialog = 1;
      show_dialog(item);
 }
 
@@ -167,7 +195,7 @@ void MainWindow::on_send_button_clicked()
     QSqlQuery query(m_db);
     int chat_id;
     QString temp;
-    if (ui->members_list->isItemSelected(ui->members_list->currentItem())){
+    if (is_on_dialog){
         temp = "SELECT dialog_id FROM pussy_dialog WHERE user1_login = '" + ui->members_list->currentItem()->text() + "';";
         qDebug() << temp;
         query.exec(temp);
@@ -196,6 +224,34 @@ void MainWindow::on_send_button_clicked()
         qDebug() << temp;
         query.exec(temp);
         show_chat(ui->chats_list->currentItem());
+    }
+}
+
+void MainWindow::set_item_size()
+{
+    //размер
+    int count = ui->members_list->count();
+    for(int i = 0; i < count; i++)
+    {
+      QListWidgetItem *item = ui->members_list->item(i);
+      item->setSizeHint(QSize(item->sizeHint().width(), 50));
+    }
+    count = ui->chats_list->count();
+    for(int i = 0; i < count; i++)
+    {
+      QListWidgetItem *item = ui->chats_list->item(i);
+      item->setSizeHint(QSize(item->sizeHint().width(), 50));
+    }
+}
+
+
+void MainWindow::on_emoji_button_clicked(bool checked)
+{
+    if (checked){
+        ui->emoji_list->show();
+    }
+    else{
+        ui->emoji_list->hide();
     }
 }
 

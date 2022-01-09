@@ -73,7 +73,9 @@ void MainWindow::on_chats_list_itemClicked(QListWidgetItem *item)
     //мемберы
     ui->members_list->clear();
     QStringList list;
-    QSqlQuery query("SELECT user_login FROM pussy_chats, pussy_chats_link WHERE pussy_chats.chat_id = pussy_chats_link.chat_id AND chat_name = '" + item->text() + "'");
+    QSqlQuery query("SELECT nickname FROM pussy_chats JOIN pussy_chats_link \
+                    ON pussy_chats.chat_id = pussy_chats_link.chat_id JOIN pussy_users\
+                    ON user_login = login WHERE chat_name = '" + item->text() + "'");
     while (query.next()) {
         list << query.value(0).toString();
     }
@@ -123,15 +125,15 @@ void MainWindow::show_chat(QListWidgetItem *item)
     QSqlQuery query(m_db);
 
 
-    std::tuple<QString, QString, QString> tuple;
-    QString tmp = "SELECT nickname, message, date FROM pussy_chats_link JOIN pussy_messages\
+    std::tuple<QString, QString, QString, QString> tuple;
+    QString tmp = "SELECT nickname, message, date, sender_login FROM pussy_chats_link JOIN pussy_messages\
                    ON pussy_chats_link.chat_id = pussy_messages.chat_id JOIN pussy_users ON sender_login = login\
-                   WHERE chat_name = '" + item->text() + "'";
+                   WHERE chat_name = '" + item->text() + "' ORDER BY 3";
     query.exec(tmp);
     while (query.next()){
-        tuple = std::make_tuple(query.value(0).toString(),query.value(1).toString(),query.value(2).toString());
+        tuple = std::make_tuple(query.value(0).toString(), query.value(1).toString(), query.value(2).toString(), query.value(3).toString());
 
-        if (std::get<0>(tuple) == current_login){
+        if (std::get<3>(tuple) == current_login){
             ui->chat_->setAlignment(Qt::AlignRight);
         }
         else{
@@ -168,15 +170,15 @@ void MainWindow::show_dialog(QListWidgetItem *item)
                     (" +  QString::number(dialog_id + 1) + ", '" + item->text() + "', '" + current_login + "')");
     }
 
-    std::tuple<QString, QString, QString> tuple;
-    QString tmp = "SELECT nickname, message, date FROM pussy_dialog JOIN pussy_messages\
+    std::tuple<QString, QString, QString, QString> tuple;
+    QString tmp = "SELECT nickname, message, date, sender_login FROM pussy_dialog JOIN pussy_messages\
                    ON pussy_dialog.dialog_id = pussy_messages.chat_id JOIN pussy_users ON sender_login = login\
-                   WHERE user1_login = '" + item->text() + "'";
+                   WHERE user1_login = '" + item->text() + "' ORDER BY 3";
     query.exec(tmp);
     while (query.next()){
-        tuple = std::make_tuple(query.value(0).toString(),query.value(1).toString(),query.value(2).toString());
+        tuple = std::make_tuple(query.value(0).toString(),query.value(1).toString(),query.value(2).toString(), query.value(3).toString());
 
-        if (std::get<0>(tuple) == current_login){
+        if (std::get<3>(tuple) == current_login){
             ui->chat_->setAlignment(Qt::AlignRight);
         }
         else{

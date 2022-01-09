@@ -8,6 +8,9 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    showMaximized();
+
     //список чатов
     m_db = QSqlDatabase::addDatabase("QPSQL");
     m_db.setDatabaseName("fn1131_2021");
@@ -173,11 +176,14 @@ void MainWindow::show_dialog(QListWidgetItem *item)
     std::tuple<QString, QString, QString, QString> tuple;
     QString tmp = "SELECT nickname, message, date, sender_login FROM pussy_dialog JOIN pussy_messages\
                    ON pussy_dialog.dialog_id = pussy_messages.chat_id JOIN pussy_users ON sender_login = login\
-                   WHERE user1_login = '" + item->text() + "' ORDER BY 3";
+                   WHERE user1_login = '" + item->text() + "' AND user2_login = '" + current_login + "' ORDER BY 3";
     query.exec(tmp);
+
+    qDebug() << current_login;
+    qDebug() << item->text();
+
     while (query.next()){
         tuple = std::make_tuple(query.value(0).toString(),query.value(1).toString(),query.value(2).toString(), query.value(3).toString());
-
         if (std::get<3>(tuple) == current_login){
             ui->chat_->setAlignment(Qt::AlignRight);
         }
@@ -198,7 +204,8 @@ void MainWindow::on_send_button_clicked()
     int chat_id;
     QString temp;
     if (is_on_dialog){
-        temp = "SELECT dialog_id FROM pussy_dialog WHERE user1_login = '" + ui->members_list->currentItem()->text() + "';";
+        temp = "SELECT dialog_id FROM pussy_dialog WHERE user1_login = '" + ui->members_list->currentItem()->text()
+                + "' AND user2_login = '" + current_login + "'";
         qDebug() << temp;
         query.exec(temp);
         query.first();

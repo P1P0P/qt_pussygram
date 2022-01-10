@@ -15,7 +15,7 @@ class GroupDialog : public QDialog
 
 public:
      GroupDialog(QWidget *parent = nullptr);
-     GroupDialog(QString, QString);
+     GroupDialog(QString, QString, QString);
     ~GroupDialog();
 
 private slots:
@@ -27,6 +27,7 @@ private:
     QSqlDatabase m_db;
     QString m_login;
     QString m_choice;
+    QString m_cur_chat;
 };
 
 #endif // GROUPDIALOG_H

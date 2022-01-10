@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>910</width>
+    <height>454</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>PussyGram</string>
   </property>
@@ -30,6 +38,9 @@
        <layout class="QGridLayout" name="center_layout">
         <item row="3" column="1">
          <widget class="QTextEdit" name="input_line">
+          <property name="enabled">
+           <bool>false</bool>
+          </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
@@ -67,8 +78,16 @@
             <height>50</height>
            </size>
           </property>
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
           <property name="text">
-           <string>TextLabel</string>
+           <string>Выберите группу</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
           </property>
          </widget>
         </item>
@@ -183,7 +202,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1016</width>
+     <width>910</width>
      <height>25</height>
     </rect>
    </property>
@@ -191,12 +210,24 @@
     <property name="title">
      <string>Меню</string>
     </property>
-    <addaction name="enter_group"/>
-    <addaction name="create_group"/>
     <addaction name="separator"/>
     <addaction name="reconnection_button"/>
+    <addaction name="delete_account"/>
+    <addaction name="separator"/>
+    <addaction name="exit"/>
+   </widget>
+   <widget class="QMenu" name="group_menu">
+    <property name="title">
+     <string>Группа</string>
+    </property>
+    <addaction name="enter_group"/>
+    <addaction name="create_group"/>
+    <addaction name="exit_group"/>
+    <addaction name="separator"/>
+    <addaction name="kick"/>
    </widget>
    <addaction name="menu"/>
+   <addaction name="group_menu"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="add_friend">
@@ -222,6 +253,29 @@
   <action name="enter_group">
    <property name="text">
     <string>Войти в группу</string>
+   </property>
+  </action>
+  <action name="exit_group">
+   <property name="text">
+    <string>Выйти из группы</string>
+   </property>
+  </action>
+  <action name="delete_account">
+   <property name="text">
+    <string>Удалить аккаунт</string>
+   </property>
+  </action>
+  <action name="exit">
+   <property name="text">
+    <string>Выход</string>
+   </property>
+  </action>
+  <action name="kick">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>КИК НАХУЙ</string>
    </property>
   </action>
  </widget>

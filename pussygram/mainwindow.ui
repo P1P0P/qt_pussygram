@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>910</width>
-    <height>454</height>
+    <width>1151</width>
+    <height>649</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,19 +18,33 @@
     <normaloff>:/res/kisspng-emoji-tiger-text-messaging-emoticon-sticker-lion-face-5ac99e07d28a10.8305330915231626318624.png</normaloff>:/res/kisspng-emoji-tiger-text-messaging-emoticon-sticker-lion-face-5ac99e07d28a10.8305330915231626318624.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">background-color: rgb(23, 33, 43);
+color: rgb(255,255,255)</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_5">
     <item row="0" column="0">
      <widget class="QSplitter" name="splitter">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
       <widget class="QWidget" name="gridLayoutWidget">
        <layout class="QGridLayout" name="left_layout">
         <item row="0" column="0">
-         <widget class="QListWidget" name="chats_list"/>
+         <widget class="QListWidget" name="chats_list">
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(23, 33, 43);</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -44,7 +58,7 @@
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>50</height>
+            <height>80</height>
            </size>
           </property>
           <property name="font">
@@ -65,6 +79,18 @@
         </item>
         <item row="1" column="0" colspan="3">
          <widget class="QTextEdit" name="chat_">
+          <property name="minimumSize">
+           <size>
+            <width>400</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(15, 24, 35);</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
           <property name="readOnly">
            <bool>true</bool>
           </property>
@@ -166,15 +192,114 @@
         </item>
         <item row="2" column="0" colspan="3">
          <widget class="QListWidget" name="emoji_list">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>90</height>
+           </size>
+          </property>
           <property name="maximumSize">
            <size>
             <width>16777215</width>
-            <height>70</height>
+            <height>90</height>
            </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
           </property>
           <property name="flow">
            <enum>QListView::LeftToRight</enum>
           </property>
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+             <normaloff>:/res/1.png</normaloff>:/res/1.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+             <normaloff>:/res/2.png</normaloff>:/res/2.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+             <normaloff>:/res/3.png</normaloff>:/res/3.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+             <normaloff>:/res/4.png</normaloff>:/res/4.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+             <normaloff>:/res/5.png</normaloff>:/res/5.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+             <normaloff>:/res/6.png</normaloff>:/res/6.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+             <normaloff>:/res/7.png</normaloff>:/res/7.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+             <normaloff>:/res/8.png</normaloff>:/res/8.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+             <normaloff>:/res/9.png</normaloff>:/res/9.png</iconset>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="icon">
+            <iconset resource="../build-pussyGram2-Desktop_Qt_5_13_2_MinGW_64_bit-Debug/debug/qmake_qmake_immediate.qrc">
+             <normaloff>:/res/10.png</normaloff>:/res/10.png</iconset>
+           </property>
+          </item>
          </widget>
         </item>
        </layout>
@@ -184,7 +309,10 @@
         <item row="0" column="0" colspan="2">
          <widget class="QListWidget" name="members_list">
           <property name="styleSheet">
-           <string notr="true"/>
+           <string notr="true">background-color: rgb(23, 33, 43);</string>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
           </property>
           <property name="flow">
            <enum>QListView::TopToBottom</enum>
@@ -202,7 +330,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>910</width>
+     <width>1151</width>
      <height>25</height>
     </rect>
    </property>
@@ -275,7 +403,7 @@
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>КИК НАХУЙ</string>
+    <string>Выгнать из группы</string>
    </property>
   </action>
  </widget>

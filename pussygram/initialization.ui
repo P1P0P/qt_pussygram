@@ -10,6 +10,9 @@
     <height>562</height>
    </rect>
   </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <widget class="QWidget" name="sign_in_widget" native="true">
@@ -57,6 +60,11 @@
           <width>16777215</width>
           <height>100</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>Вход</string>
@@ -203,6 +211,11 @@ font: 8pt &quot;MS Shell Dlg 2&quot;;</string>
           <width>16777215</width>
           <height>100</height>
          </size>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>12</pointsize>
+         </font>
         </property>
         <property name="text">
          <string>Регистрация</string>

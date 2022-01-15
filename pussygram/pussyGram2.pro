@@ -14,7 +14,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp
 
-RESOURCES += "C:\dev\Qt_Project\qt_pussygram\pussygram\res"
+RESOURCES += ".\res"
 
 HEADERS += \
     groupdialog.h \

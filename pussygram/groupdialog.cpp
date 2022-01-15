@@ -34,10 +34,11 @@ GroupDialog::GroupDialog(QString login, QString choice, QString cur_chat): Group
         ui->label->setGeometry(80,100,300,30);
         ui->buttonBox->setText("Да, удалить");
     }
-    else if (m_choice == "КИК НАХУЙ"){
-        ui->label->setText("Кого хош?");
-        ui->buttonBox->setText("КИК");
+    else if (m_choice == "Выгнать из группы"){
+        ui->label->setText("Кого Вы хотите выгнать?");
+        ui->buttonBox->setText("Выгнать");
     }
+    //setWindowFlags(Qt::FramelessWindowHint);
 }
 
 GroupDialog::~GroupDialog()
@@ -51,17 +52,15 @@ void GroupDialog::on_buttonBox_clicked()
     QString temp;
     QSqlQuery query(m_db);
     int chats_id;
-    qDebug() << m_choice;
     if(m_choice == "Создать группу"){
         query.exec("SELECT MAX(chat_id) FROM (\
-                   (SELECT MAX(chat_id) AS chat_id FROM pussy_chats)\
+                   (SELECT MAX(chat_id) AS chat_id FROM pussy_chats_link)\
                    union\
                    (SELECT MAX(dialog_id) AS chat_id FROM pussy_dialog)\
                    ) COMBINED");
         query.first();
         chats_id = query.value(0).toInt();
         temp = "INSERT INTO pussy_chats_link VALUES (" + QString::number(chats_id+1)+ ",'" + ui->group_edit->toPlainText() + "');";
-        qDebug() << temp;
         if(query.exec(temp)){
             temp = "INSERT INTO pussy_chats VALUES(" + QString::number(chats_id+1) + ",'" + m_login + "','true');";
             query.exec(temp);
@@ -76,7 +75,6 @@ void GroupDialog::on_buttonBox_clicked()
         query.first();
         chats_id = query.value(0).toInt();
         temp = "DELETE FROM pussy_chats WHERE chat_id =" + QString::number(chats_id)+ " and user_login = '" + m_login + "';";
-        qDebug() << temp;
         if(query.exec(temp) && chats_id != 0)
             accept();
         else
@@ -109,3 +107,9 @@ void GroupDialog::on_buttonBox_clicked()
         accept();
     }
 }
+
+void GroupDialog::on_pushButton_clicked()
+{
+    close();
+}
+

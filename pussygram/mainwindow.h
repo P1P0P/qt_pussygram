@@ -47,6 +47,8 @@ private slots:
 
     void on_kick_triggered();
 
+    void on_emoji_list_itemClicked(QListWidgetItem *item);
+
 private:
     QString current_login;
     Ui::MainWindow *ui;
@@ -54,8 +56,11 @@ private:
     void update_chats_list();
     void show_chat(QListWidgetItem *item);
     void show_dialog(QListWidgetItem *item);
-
+    QString encrypt(QString);
+    QString decrypt(QString);
     int mode = 0; //none - 0, chat - 1, dialog - 2
     QTimer *time;
+
+    std::vector<std::pair<int, int>> vector;
 };
 #endif // MAINWINDOW_H

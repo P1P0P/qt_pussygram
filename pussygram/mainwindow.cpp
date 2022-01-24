@@ -3,7 +3,6 @@
 #include "initialization.h"
 #include <QTimer>
 #include <QScrollBar>
-//#include <QTextCodec>
 
 
 
@@ -34,9 +33,38 @@ MainWindow::MainWindow(QWidget *parent)
       item->setSizeHint(QSize(80, 80));
     }
     time=new QTimer(this);
-    time->setInterval(10000);
+    time->setInterval(1000);
     QObject::connect(time,SIGNAL(timeout()),this,SLOT(refresh()));
     time->start();
+
+
+    ui->chat_->verticalScrollBar()->setStyleSheet(QString::fromUtf8("QScrollBar:vertical {"
+                                                                                           "    border: 1px solid #999999;"
+                                                                                           "    background:white;"
+                                                                                           "    width:10px;    "
+                                                                                           "    margin: 0px 0px 0x 0px;"
+                                                                                           "}"
+                                                                                           "QScrollBar::handle:vertical {"
+                                                                                           "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+                                                                                           "    stop: 0 rgb(32, 47, 130), stop: 0.5 rgb(32, 47, 130), stop:1 rgb(32, 47, 130));"
+                                                                                           "    min-height: 0px;"
+                                                                                           "}"
+                                                                                           "QScrollBar::add-line:vertical {"
+                                                                                           "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+                                                                                           "    stop: 0 rgb(32, 47, 130), stop: 0.5 rgb(32, 47, 130),  stop:1 rgb(32, 47, 130));"
+                                                                                           "    height: 0px;"
+                                                                                           "    subcontrol-position: bottom;"
+                                                                                           "    subcontrol-origin: margin;"
+                                                                                           "}"
+                                                                                           "QScrollBar::sub-line:vertical {"
+                                                                                           "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+                                                                                           "    stop: 0  rgb(32, 47, 130), stop: 0.5 rgb(32, 47, 130),  stop:1 rgb(32, 47, 130));"
+                                                                                           "    height: 0 px;"
+                                                                                           "    subcontrol-position: top;"
+                                                                                           "    subcontrol-origin: margin;"
+                                                                                           "}"
+                                                                                           ));
+
 }
 
 MainWindow::MainWindow(QString login) : MainWindow()
@@ -67,19 +95,28 @@ void MainWindow::on_chats_list_itemClicked(QListWidgetItem *item)
     mode = 1;
     ui->kick->setEnabled(0);
     ui->input_line->clear();
+    vector.clear();
     ui->name_label->setText(item->text());
     ui->members_list->clear();
+
     QStringList list;
-    QSqlQuery query("SELECT nickname, login, main_member FROM pussy_chats JOIN pussy_chats_link \
-                    ON pussy_chats.chat_id = pussy_chats_link.chat_id JOIN pussy_users\
-                    ON user_login = login WHERE chat_name = '" + item->text() + "'");
+    QSqlQuery query(m_db);
+    query.exec("SELECT nickname, login, main_member FROM pussy_chats JOIN pussy_chats_link \
+               ON pussy_chats.chat_id = pussy_chats_link.chat_id JOIN pussy_users\
+               ON user_login = login WHERE chat_name = '" + item->text() + "' AND login != '" + current_login + "'");
     while (query.next()){
         list << query.value(0).toString();
-        if (query.value(1).toString() == current_login and query.value(2).toBool() == true){
-            ui->kick->setEnabled(1);
-        }
     }
     ui->members_list->addItems(list);
+
+    query.exec("SELECT main_member FROM pussy_chats JOIN pussy_chats_link \
+               ON pussy_chats.chat_id = pussy_chats_link.chat_id JOIN pussy_users\
+               ON user_login = login WHERE chat_name = '" + item->text() + "' AND login = '" + current_login + "'");
+    query.first();
+    if (query.value(0).toBool() == true){
+        ui->kick->setEnabled(1);
+    }
+
     if (item->text() != "Users"){
         show_chat(item);
         ui->input_line->setEnabled(1);
@@ -87,6 +124,7 @@ void MainWindow::on_chats_list_itemClicked(QListWidgetItem *item)
     }
     else{
         ui->input_line->setEnabled(0);
+        ui->chat_->clear();
     }
     set_item_size();
 
@@ -104,9 +142,12 @@ void MainWindow::on_members_list_itemClicked(QListWidgetItem *item)
          update_chats_list();
          show_dialog(item);
          ui->input_line->setEnabled(1);
+         vector.clear();
          ui->kick->setEnabled(0);
          ui->input_line->setFocus();
      }
+     else
+         on_reconnection_button_triggered();
 }
 
 void MainWindow::on_reconnection_button_triggered()
@@ -139,44 +180,17 @@ void MainWindow::show_chat(QListWidgetItem *item)
     font.setPointSize(12);
     ui->chat_->setFont(font);
     QSqlQuery query(m_db);
-    QSqlQuery query2(m_db);
-    QString last_sender;
-
-    std::tuple<QString, QString, QString, QString> tuple;
-    QString tmp = "SELECT nickname, message, date, sender_login, message_id FROM pussy_chats_link JOIN pussy_messages\
-                   ON pussy_chats_link.chat_id = pussy_messages.chat_id JOIN pussy_users\
-                   ON sender_login = login WHERE chat_name = '" + item->text() + "' ORDER BY 3";
-    query.exec(tmp);
+    last_message_id = 0;
+    last_sender = "";
+    query.exec("SELECT nickname, message, date, sender_login, message_id FROM pussy_chats_link JOIN pussy_messages\
+               ON pussy_chats_link.chat_id = pussy_messages.chat_id JOIN pussy_users\
+               ON sender_login = login WHERE chat_name = '" + item->text() + "' ORDER BY 3");
     while (query.next()){
-        tuple = std::make_tuple(query.value(0).toString(), query.value(1).toString(), query.value(2).toString(), query.value(3).toString());
-        if (std::get<3>(tuple) == current_login){
-            ui->chat_->setAlignment(Qt::AlignRight);
-        }
-        else{
-            ui->chat_->setAlignment(Qt::AlignLeft);
-        }
-        if (last_sender != std::get<3>(tuple)){
-            ui->chat_->append(std::get<0>(tuple));
-        }
-        ui->chat_->append("");
-        last_sender = std::get<3>(tuple);
-
-        query2.exec("SELECT position, image_id FROM pussy_images WHERE message_id = " + QString::number(query.value(4).toInt()));
-
-        QString tmp = std::get<1>(tuple);
-        while (query2.next())
-        {
-            ui->chat_->insertPlainText(tmp.left(query2.value(0).toInt()));
-            ui->chat_->insertHtml(QString("<img src=\"%1\" width=\"70\" height=\"70\">").arg(("./img/" + query2.value(1).toString() + ".png")));
-            tmp = tmp.remove(0, query2.value(0).toInt());
-        }
-        ui->chat_->insertPlainText(tmp);
-
-        ui->chat_->append(std::get<2>(tuple));
-        ui->chat_->append("");
-        ui->chat_->verticalScrollBar()->setValue(ui->chat_->verticalScrollBar()->maximum());
+        show_message(query.value(0), query.value(1), query.value(2), query.value(3), query.value(4));
     }
-
+    query.last();
+    last_sender = query.value(0).toString();
+    last_message_id = query.value(4).toInt();
 }
 
 void MainWindow::show_dialog(QListWidgetItem *item)
@@ -186,8 +200,9 @@ void MainWindow::show_dialog(QListWidgetItem *item)
     font.setPointSize(12);
     ui->chat_->setFont(font);
     QSqlQuery query(m_db);
-    QSqlQuery query2(m_db);
     int dialog_id = 0;
+    last_message_id = 0;
+    last_sender = "";
     query.exec("SELECT login FROM pussy_users WHERE nickname = '" + item->text() + "'");
     query.first();
     QString login = query.value(0).toString();
@@ -205,38 +220,58 @@ void MainWindow::show_dialog(QListWidgetItem *item)
                     (" +  QString::number(dialog_id + 1) + ", '" + login + "', '" + current_login + "')");
     }
 
-    std::tuple<QString, QString, QString, QString> tuple;
     QString tmp = "SELECT nickname, message, date, sender_login, message_id FROM pussy_dialog JOIN pussy_messages\
                    ON pussy_dialog.dialog_id = pussy_messages.chat_id JOIN pussy_users\
                    ON sender_login = login WHERE user1_login = '" + login + "' AND user2_login = '" + current_login + "' ORDER BY 3";
     query.exec(tmp);
 
     while (query.next()){
-        tuple = std::make_tuple(query.value(0).toString(),query.value(1).toString(),query.value(2).toString(), query.value(3).toString());
-        if (std::get<3>(tuple) == current_login){
-            ui->chat_->setAlignment(Qt::AlignRight);
-        }
-        else{
-            ui->chat_->setAlignment(Qt::AlignLeft);
-        }
-        ui->chat_->append(std::get<0>(tuple));
-        ui->chat_->append("");
+        show_message(query.value(0), query.value(1), query.value(2), query.value(3), query.value(4));
+    }
+    query.last();
+    last_sender = query.value(0).toString();
+    last_message_id = query.value(4).toInt();
+}
 
+void MainWindow::show_message(QVariant val0, QVariant val1, QVariant val2, QVariant val3, QVariant val4)
+{
+    int prev_pos = 0;
+    QSqlQuery query2(m_db);
 
-        query2.exec("SELECT position, image_id FROM pussy_images WHERE message_id = " + QString::number(query.value(4).toInt()));
-        QString tmp = std::get<1>(tuple);
-        while (query2.next())
-        {
-            ui->chat_->insertPlainText(tmp.left(query2.value(0).toInt()));
-            ui->chat_->insertHtml(QString("<img src=\"%1\" width=\"70\" height=\"70\">").arg(("./img/" + query2.value(1).toString() + ".png")));
-            tmp = tmp.remove(0, query2.value(0).toInt());
+    if (val3.toString() == current_login){
+        ui->chat_->setAlignment(Qt::AlignRight);
+        if (last_sender != val3.toString()){
+            ui->chat_->insertHtml("<div align=\"right\"><font color=\"DeepSkyBlue\">" + val0.toString() + "</font></div>");
+            ui->chat_->setTextColor("white");
         }
-        ui->chat_->insertPlainText(tmp);
-
-        ui->chat_->append(std::get<2>(tuple));
-        ui->chat_->append("");
+    }
+    else{
+        ui->chat_->setAlignment(Qt::AlignLeft);
+        if (last_sender != val3.toString()){
+            ui->chat_->insertHtml("<div align=\"left\"><font color=\"DeepSkyBlue\">" + val0.toString() + "</font></div>");
+            ui->chat_->setTextColor("white");
+        }
     }
 
+    ui->chat_->append("");
+    last_sender = val3.toString();
+
+    query2.exec("SELECT position, image_id FROM pussy_images WHERE message_id = " + QString::number(val4.toInt()));
+
+    QString tmp = decrypt(val1.toString());
+
+    while (query2.next())
+    {
+        ui->chat_->insertPlainText(tmp.left(query2.value(0).toInt() - prev_pos));
+        ui->chat_->insertHtml(QString("<img src=\"%1\" width=\"70\" height=\"70\">").arg(("./img/" + query2.value(1).toString() + ".png")));
+        tmp = tmp.remove(0, query2.value(0).toInt() - prev_pos);
+        prev_pos = query2.value(0).toInt() + 1;
+    }
+    ui->chat_->insertPlainText(tmp);
+
+    ui->chat_->append(val2.toDateTime().toString("ddd hh:mm"));
+    ui->chat_->append("");
+    ui->chat_->verticalScrollBar()->setValue(ui->chat_->verticalScrollBar()->maximum());
 }
 
 void MainWindow::on_send_button_clicked()
@@ -245,6 +280,7 @@ void MainWindow::on_send_button_clicked()
         QSqlQuery query(m_db);
         int chat_id;
         QString temp;
+
         query.exec("SELECT MAX(message_id) FROM pussy_messages");
         query.first();
         QString message_id = QString::number(query.value(0).toInt() + 1);
@@ -261,14 +297,15 @@ void MainWindow::on_send_button_clicked()
             QDateTime cur_time = QDateTime::currentDateTime();
             QString current_time = cur_time.toString("yyyy-MM-dd hh:mm:ss");
             temp = "INSERT INTO pussy_messages VALUES(" + message_id + ", " + QString::number(chat_id) + ",'" + current_login + "','"
-                    + ui->input_line->toPlainText() + "','" + current_time + "');";
-            ui->input_line->clear();
+                    + encrypt(ui->input_line->toPlainText()) + "','" + current_time + "');";
+
             query.exec(temp);
             while (!vector.empty()){
                 query.exec("INSERT INTO pussy_images VALUES (" + message_id + ", " + QString::number(vector[0].first) + ", " + QString::number(vector[0].second) + ")");
                 vector.erase(vector.begin());
             }
             show_dialog(ui->members_list->currentItem());
+            ui->input_line->clear();
         }
         else if (mode == 1){
             temp = "SELECT chat_id FROM pussy_chats_link WHERE chat_name = '" + ui->chats_list->currentItem()->text()+ "';";
@@ -278,14 +315,15 @@ void MainWindow::on_send_button_clicked()
             QDateTime cur_time = QDateTime::currentDateTime();
             QString current_time = cur_time.toString("yyyy-MM-dd hh:mm:ss");
             temp = "INSERT INTO pussy_messages VALUES(" + message_id + ", " + QString::number(chat_id) + ",'" + current_login + "','"
-                    + ui->input_line->toPlainText() + "','" + current_time + "');";
-            ui->input_line->clear();
+                    + encrypt(ui->input_line->toPlainText()) + "','" + current_time + "');";
+
             query.exec(temp);
             while (!vector.empty()){
                 query.exec("INSERT INTO pussy_images VALUES (" + message_id + ", " + QString::number(vector[0].first) + ", " + QString::number(vector[0].second) + ")");
                 vector.erase(vector.begin());
             }
             show_chat(ui->chats_list->currentItem());
+            ui->input_line->clear();
         }
         ui->input_line->setFocus();
         ui->chat_->verticalScrollBar()->setValue(ui->chat_->verticalScrollBar()->maximum());
@@ -323,12 +361,27 @@ void MainWindow::on_emoji_button_clicked(bool checked)
 void MainWindow::refresh()
 {
     int pos = ui->chat_->verticalScrollBar()->value();
-
+    QSqlQuery query(m_db);
     if (mode == 2){
-        show_dialog(ui->members_list->currentItem());
+        query.exec("SELECT nickname, message, date, sender_login, message_id FROM pussy_dialog JOIN pussy_messages\
+                   ON pussy_dialog.dialog_id = pussy_messages.chat_id JOIN pussy_users\
+                   ON sender_login = login WHERE user1_login = (SELECT login FROM pussy_users WHERE nickname = '" + ui->members_list->currentItem()->text() + "') \
+                   AND user2_login = '" + current_login + "' ORDER BY 3");
+        query.last();
+        if (last_message_id != query.value(4).toInt()){
+                show_message(query.value(0), query.value(1), query.value(2), query.value(3), query.value(4));
+                last_sender = query.value(0).toString();
+        }
     }
     else if (mode == 1){
-        show_chat(ui->chats_list->currentItem());
+        query.exec("SELECT nickname, message, date, sender_login, message_id  FROM pussy_messages JOIN pussy_chats_link\
+                     ON pussy_messages.chat_id = pussy_chats_link.chat_id JOIN pussy_users\
+                     ON login = sender_login WHERE chat_name = '" + ui->chats_list->currentItem()->text() + "' ORDER BY 3");
+        query.last();
+        if (last_message_id != query.value(4).toInt()){
+                show_message(query.value(0), query.value(1), query.value(2), query.value(3), query.value(4));
+                last_sender = query.value(0).toString();
+        }
     }
 
     ui->chat_->verticalScrollBar()->setValue(pos);
@@ -365,58 +418,81 @@ void MainWindow::on_kick_triggered()
 void MainWindow::on_emoji_list_itemClicked(QListWidgetItem *item)
 {
     if (mode != 0){
-        vector.push_back(std::make_pair(ui->input_line->toPlainText().length(), ui->emoji_list->currentRow() + 1));
+        vector.push_back(std::make_pair(ui->input_line->textCursor().position(), ui->emoji_list->currentRow() + 1));
         ui->input_line->insertHtml(QString("<img src=\"%1\" width=\"70\" height=\"70\">").arg(("./img/" + QString(std::to_string(ui->emoji_list->currentRow() + 1).c_str()) + ".png")));
     }
     ui->input_line->setFocus();
 }
 
+void MainWindow::on_input_line_textChanged()
+{
+    int pos = 0;
+    int len = 0;
+    if (before.size() > ui->input_line->toPlainText().size()){
+        for (int i = 0; i < before.size(); i++){
+            if (before[i] != ui->input_line->toPlainText()[i]){
+                pos = i;
+                len = before.size() - ui->input_line->toPlainText().size();
+                break;
+            }
+        }
+        for (int i = 0; i < vector.size(); i++){
+            if (pos < vector[i].first){
+                if (vector[i].first - pos >= len){
+                    vector[i].first = vector[i].first - len;
+                }
+                else{
+                    vector.erase(vector.begin() + i);
+                    i--;
+                }
+            }
+        }
+    }
+    else{
+        for (int i = 0; i < before.size(); i++){
+            if (before[i] != ui->input_line->toPlainText()[i]){
+                pos = i;
+                len = ui->input_line->toPlainText().size() - before.size();
+                break;
+            }
+        }
+        for (int i = 0; i < vector.size(); i++){
+            if (pos <= vector[i].first){
+                vector[i].first = vector[i].first + len;
+            }
+        }
+    }
+
+    before = ui->input_line->toPlainText();
+}
+
+
+QString MainWindow::encrypt(QString input)
+{
+    QString alphabet = "Лрв>Дn9JiЖО\":жР,зHTsЙПhjмЭАb!.yGпЯкmf2Ц Y0УЧВKоgcКIFСQM5l4ёUМщЫLИeЕ?NТ/#RvЬНpБ71ГЮDэBФШEЩk%З=Zo-'сюV^<ХъOеSXЪля@qа)aWC+*шrун;йцдчtт_P&(`фw$ыхdи~A63бёгu|ь8zx";
+    for (int i = 0; i < input.size(); i++)
+    {
+        if (input[i] != "￼")
+            input.replace(i, 1, alphabet[(alphabet.indexOf(input[i]) + 3) % 157]);
+        else{
+            input.remove(i, 1);
+            i--;
+        }
+    }
+    return input;
+}
+
+QString MainWindow::decrypt(QString input)
+{
+    QString alphabet = "Лрв>Дn9JiЖО\":жР,зHTsЙПhjмЭАb!.yGпЯкmf2Ц Y0УЧВKоgcКIFСQM5l4ёUМщЫLИeЕ?NТ/#RvЬНpБ71ГЮDэBФШEЩk%З=Zo-'сюV^<ХъOеSXЪля@qа)aWC+*шrун;йцдчtт_P&(`фw$ыхdи~A63бёгu|ь8zx";
+    for (int i = 0; i < input.size(); i++){
+        if (alphabet.contains(input[i]))
+            input.replace(i, 1, alphabet[(alphabet.indexOf(input[i]) - 3 + 157) % 157]);
+    }
+    return input;
+}
 
 void MainWindow::on_exit_triggered()
 {
     QApplication::quit();
-}
-
-/*QString MainWindow::encrypt(QString input)
-{
-    setlocale(LC_ALL, "Russian");
-    char c;
-    std::string input_str = input.toStdString();
-    qDebug() << input;
-    std::vector<char> word;
-    for(int i = 0; i< input.size();i++){
-        c = input_str[i];
-        qDebug() << QChar(c);
-        word.push_back(c);
-    }
-    std::string alphabet = "abcdefghijklmnopqrstuvwxyzёйцукенгшщзхъэждлорпавыфячсмитьбю";
-    for (int i = 0; i < (int)input.length(); i++) {
-        for (int j = 0; j < (int)alphabet.length(); j++) {
-            if (word[i] == alphabet[j]) {
-                word[i] = alphabet[(j +3) % 59];
-                break;
-            }
-        }
-    }
-    std::string str(word.begin(), word.end());
-    QString out = QString::fromStdString(str);
-    return out;
-}*/
-
-QString encrypt(QString input)
-{
-    QString alphabet = "abcdefghijklmnopqrstuvwxyzёйцукенгшщзхъэждлорпавыфячсмитьбю";
-    for (int i = 0; i < input.size(); i++){
-        input.replace(i, 1, alphabet[(alphabet.indexOf(input[i]) + 3) % 59]);
-    }
-    return input;
-}
-
-QString decrypt(QString input)
-{
-    QString alphabet = "abcdefghijklmnopqrstuvwxyzёйцукенгшщзхъэждлорпавыфячсмитьбю";
-    for (int i = 0; i < input.size(); i++){
-        input.replace(i, 1, alphabet[(alphabet.indexOf(input[i]) - 3) % 59]);
-    }
-    return input;
 }

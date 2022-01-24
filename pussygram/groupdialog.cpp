@@ -38,7 +38,6 @@ GroupDialog::GroupDialog(QString login, QString choice, QString cur_chat): Group
         ui->label->setText("Кого Вы хотите выгнать?");
         ui->buttonBox->setText("Выгнать");
     }
-    //setWindowFlags(Qt::FramelessWindowHint);
 }
 
 GroupDialog::~GroupDialog()
@@ -81,8 +80,7 @@ void GroupDialog::on_buttonBox_clicked()
             ui->error_label->setText("Такой группы не существует");
     }
     else if (m_choice == "Удалить аккаунт"){
-        temp = "DELETE FROM pussy_users WHERE login = '" + m_login + "';";
-        query.exec(temp);
+        query.exec("UPDATE pussy_users SET nickname = 'DELETED', password = '3YHwrB3Y434f874b' WHERE login = '" + m_login +"'");
         accept();
     }
     else if (m_choice == "Войти в группу"){
